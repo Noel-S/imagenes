@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/static/bootstrap.min.css">
+    <title>Imágenes</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="input-group mb-3 fixed-top"
+            style="padding-top: 45px; padding-bottom: 20px; padding-left: 128px; padding-right: 128px; background-color: white;">
+            <input type="text" class="form-control" placeholder="Buscar imágen" id="buscar">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="button" id="btnBuscar">Buscar</button>
+            </div>
+        </div>
+        <div class="row" style="height: calc(100vh - 103px); margin-top: 103px;">
+            <div class="card-columns" id="imagenes">
+
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/jquery-3.3.1.min.js"></script>
+    <script>
+        $('#btnBuscar').click(() => {
+            let value = $('#buscar').val()
+            $.post('/buscar', { busqueda: value }, data => {
+                let imagenes = $('#imagenes')
+                imagenes.empty()
+                $.each(data.images, (i, val) => {
+                    $(card(val.url, val.nombre)).appendTo(imagenes)
+                })
+            })
+        })
+
+        function card(src, title) {
+            return '<div class="card">' +
+                `<img src="${src}" class="card-img-top">` +
+                '<div class="card-body">' +
+                `<h6 class="card-title">${title}</h6>` +
+                '</div>' +
+                '</div>'
+        }
+    </script>
+</body>
+
+</html>
